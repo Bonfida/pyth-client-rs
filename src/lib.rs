@@ -1,6 +1,6 @@
 pub const MAGIC: u32 = 0xa1b2c3d4;
-pub const VERSION_1: u32 = 1;
-pub const VERSION: u32 = VERSION_1;
+pub const VERSION_2: u32 = 2;
+pub const VERSION: u32 = VERSION_2;
 pub const MAP_TABLE_SIZE: usize = 640;
 pub const PROD_ACCT_SIZE: usize = 512;
 pub const PROD_HDR_SIZE: usize = 48;
@@ -37,8 +37,6 @@ pub enum CorpAction {
 pub enum PriceType {
     Unknown,
     Price,
-    TWAP,
-    Volatility,
 }
 
 // solana public key
@@ -102,11 +100,19 @@ pub struct Price {
     pub unused: u32,
     pub curr_slot: u64,        // currently accumulating price slot
     pub valid_slot: u64,       // valid slot-time of agg. price
+    pub twap: i64,             // time-weighted average price
+    pub avol: u64,             // annualized price volatility
+    pub drv0: i64,             // space for future derived values
+    pub drv1: i64,             // space for future derived values
+    pub drv2: i64,             // space for future derived values
+    pub drv3: i64,             // space for future derived values
+    pub drv4: i64,             // space for future derived values
+    pub drv5: i64,             // space for future derived values
     pub prod: AccKey,          // product account key
     pub next: AccKey,          // next Price account in linked list
     pub agg_pub: AccKey,       // quoter who computed last aggregate price
     pub agg: PriceInfo,        // aggregate price info
-    pub comp: [PriceComp; 16], // price components one per quoter
+    pub comp: [PriceComp; 32], // price components one per quoter
 }
 
 struct AccKeyU64 {
